@@ -1,0 +1,520 @@
+# Git basic commands and workflow
+
+__author__ = 'sidmishraw'
+
+
+
+# Installing git
+# safest bet, installs to /usr/local/bin dir
+# default git installed at /usr/bin dir
+
+brew install git    
+
+# or download from git-scm.com for the desired platform
+
+
+# Check version
+
+git --version
+
+
+# Setup config
+
+git config --global <variable name> <value>
+
+# generic format
+# git config <option> <variable name> <value>
+# for eg -
+# git config --global user.name "Sidharth Mishra"
+# git config --global user.email "sidmishraw@gmail.com"
+
+
+# list all current values of git's configuration
+
+git config --list
+
+
+
+# HELP
+# git commands are called verbs
+
+git help <verb>
+
+# or
+
+git <verb> --help
+
+
+# Scenarios
+# Existing project on local machine and need to start tracking it
+# Cloning a remote repository
+
+
+# NOTE - RUN ALL THOSE git commands from inside the project directory
+
+
+# Initialize a repository from existing code
+# change to project base directory and then run the command
+
+git init
+
+# adds the .git dir inside the project to start tracking the repository
+# .git dir is the repository
+
+# delete/remove repository from git VCS
+
+rm -rf .git
+                    
+
+# Check status of project
+
+git status
+
+# checks the Tracked(Staged) files, Untracked files and branch info
+
+
+# Create .gitignore file
+
+touch .gitignore
+
+# add the files, regex to ignore in the .gitignore file
+
+
+# git different stages
+# project (working directory)
+# staging area
+# .git directory(repository)
+
+# .git directory(repository) ------> project (working directory) is called checkout the project
+# project (working directory) -------> staging area is called stage fixes
+# staging area ------> .git directory(repository) is called a commit
+
+
+# Add files to staging area
+
+git add <filename>
+
+# or to add all files (default behavior for git v2 and above)
+
+git add -A
+
+
+# syntax variations
+# git add --all  -- will stage changes for the entire working tree(even if)
+# changes are from other dir, but within same working tree
+
+# git add -A <dir name> for just the dir
+
+
+# add modified and deleted files but not untracked files to staging area
+
+# git add -u <dir optional>
+# git add --update <dir optional>
+
+
+# add files from currenct dir
+
+# git add .
+# same as git add -A <path to current dir>
+
+# don't use git add *
+# won't add modified and deleted files to staging area of that directory
+# may add the ones from sub directories since it passes them to add
+
+# OS doesn't track the deleted files, but git does
+
+
+
+
+
+
+# Remove files from staging area
+
+git reset <filename>
+
+# or to remove all files
+
+git reset
+
+
+# Commit process
+
+# add all changes to staging area
+# commit
+# git status will return working directory is clean
+
+git commit -m "message"
+
+
+# Check log
+
+git log
+
+
+# Cloning remote repository
+
+git clone <url> <path on local machine where to place it>
+
+# git clone https://github.com/sidmishraw/pokemon-classifier ~/Documents/workspace
+# url can also be the path on the local machine
+
+
+# View information about remote repository
+
+git remote -v
+
+# lists out all branches, both local and remote
+
+git branch -a
+
+
+# After making changes workflow to commit and push to remote repo
+
+# check the differences
+
+git diff
+
+# check status
+# git status
+# add all to staging area
+# git add -A
+# commit
+# git commit -m "message"
+
+# push
+# first, pull changes into working directory
+
+git pull <repository_name> <branch name>
+
+# second, push changes
+
+git push <repository name> <branch name>
+
+
+
+# default branch - master
+# default repo name - origin
+# Common workflow
+# Create a branch for developing desired feature
+
+git branch <branch name>
+
+# change from old branch to new branch
+
+git checkout <branch name>
+
+
+# list out all branches
+# current branch has * next to it
+
+git branch
+
+# follow the steps as for normal commit
+# after changing branches
+# commit to local branch
+
+# push to remote branch
+# tell git to assosiate local branch with remote branch
+# so that we can do
+# git pull
+# git push
+ 
+git push -u <remote repository name> <branch name>
+
+
+# check all the branches
+# git branch -a
+
+
+# Merge branch
+# checkout master branch
+
+git checkout master
+
+# pull changes from the master branches
+
+git pull <repository name> <master branch name>
+
+# check the branches that have been merged
+
+git branch --merged
+
+# merge the branch with master branch
+
+git merge <branch name>
+
+
+# push the changes to remote
+# git push <repository name> <master branch name>
+
+
+# check the changes have been merged
+# check braches merged
+# git branch --merged
+
+# delete branch (locally)
+
+git branch -d <branch name>
+
+# push delete or delete remote branch
+
+git push <repository name> --delete <branch name>
+
+
+
+
+
+# git advanced
+
+# create a new repository from command line example
+
+echo "# pythonstuff" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/sidmishraw/pythonstuff.git
+git push -u origin master
+
+
+
+# push an existing repository from command line
+# for example:
+# git remote add origin https://github.com/sidmishraw/pythonstuff.git
+
+git remote add <repository name> <url>
+
+
+# to reverse files that have not been committed
+
+git checkout <filename>
+
+
+# change the message of commit without commiting file
+# -- will change the git history --
+# do not use this when multiple people depend on the repository
+
+git commit --ammend -m "new message"
+
+
+# scenario - left out a file from the commit
+# add the file to staging area
+# do this is haven't pushed changes to other people
+
+git commit --ammend
+
+# check files that were commited
+
+git log --stat
+
+
+# Move commit from master to feature branch
+# and revert master branch
+
+# Use git cherry pick
+# only creates a new commit based off old commit
+# but doesn't delete the commit after cherry picking
+
+# process for cherry picking
+
+# need the commit's hash number
+# entire hash is not needed, first 6-7 characters are fine
+
+git log
+
+# switch to the desired branch
+
+git checkout <branch name>
+
+# do a git log again to check the commit history of
+# this branch
+
+git log
+
+# do the cherry pick with the hash
+
+git cherry-pick <hash>
+
+# do a git log to see the changes
+
+# switch to master
+
+git checkout master
+
+# do a git log
+
+git log
+
+# 3 types of git reset to revert commits
+
+# return to a particular commit
+# needs the hash of the desired commit to go back to
+
+git reset --soft <hash>
+
+# soft reset - reverts back to the commit specified
+# and also keeps the changes done to the staging direcory
+
+# default
+
+git reset --mixed <hash>
+
+# keeps the changes are in the working directory
+
+# hard reset
+
+git reset --hard <hash>
+
+# gets rid of changes
+# reverts all the tracked files to how they were in the specified commit
+# doesn't modify the untracked files
+
+# to get rid of untracked files
+# d - rids of untracked dir
+# f - rids of untracked files
+
+git clean -df
+
+
+
+# Getting back changes that were deleted by git reset hard
+# if lot of time has passed since the hard reset (more than 30 days)
+# cannot get it back
+# else, follow the procedure below
+
+# git reflog
+# shows the commits in the order in which we last referenced them
+
+git reflog
+
+# grab the hash of the commit needed
+
+# check out from hash
+
+git checkout <hash>
+
+# we are in a Deteched HEAD state
+# this will be garbage collected after 30 days
+
+# to save this
+# create a new branch for backup
+
+git branch <branch name>
+
+# check out the master branch
+
+git checkout <master branch name>
+
+# switch to backup branch
+
+git checkout <backup branch>
+
+# git log from the back up branch
+
+git log
+
+
+
+# git revert
+# reverses the changes to keep git history intact
+# copy the hash of the commit to revert(undo)
+
+git revert <hash>
+
+# it will prompt a message
+# save it and move on
+
+
+# checking diff between two commits
+
+git diff <hash 1> <hash 2>
+
+
+
+
+# git stash
+# have changes not yet committed
+# need to switch branches and other stuff
+# stash changes stores them for later use
+# and takes away all the changes and stores them in stash
+
+git stash save "message"
+
+# list all stashed
+
+git stash list
+
+# to apply changes stored in stash
+# doesn't delete them
+
+git stash apply <stash name from the stash listing>
+
+
+# pop from stash
+# pops the topmost from stash and applies it to the working directory
+
+git stash pop
+
+
+# drop the changes from stash
+
+git stash drop <stash name from listing>
+
+
+# drops all the stashes in the stash stack
+
+git stash clear
+
+
+# stash it carried over from branch to branch
+# helpful when carrying over changes that were not meant to be made on master
+# branch to another branch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
