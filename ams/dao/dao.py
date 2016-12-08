@@ -93,9 +93,9 @@ class AMSDao(object):
   # inner __AMSDao class singleton
   def __new__(cls):
     'creates the object for AMSDao'
-    if not AMSDao.instance:
-      AMSDao.instance = AMSDao.__AMSDao()
-    return AMSDao.instance
+    if not cls.instance:
+      cls.instance = cls.__AMSDao()
+    return cls.instance
 
   def __init__(self):
     pass

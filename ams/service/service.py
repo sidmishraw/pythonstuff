@@ -5,6 +5,13 @@
 
 __author__ = 'sidmishraw'
 
+from ams.dao.dao import AMSDao
+from ams.bo.bo import Account
+from ams.bo.bo import Transaction
+from ams.utils.utils import Time
+from ams.utils.utils import Money
+import time
+
 
 # Note - Do I need the services to be instance methods of a service class
 # or just functions of my service module.
@@ -24,14 +31,26 @@ class AMSService(object):
       pass
 
     def create_account(self, account_name=None, account_type=None):
-      pass
+      'creates an account from the given account_name and account_type'
+      dao = AMSDao()
+      account = Account(name=account_name,account_type=account_type)
+      dao.save_account(account)
+      return account
 
     def reverse_account(self, account_id=None):
+      'reverses all the transactions of the account'
       pass
 
     def transfer_fund(self, debit_account=None, \
       credit_account=None, amount=None, file=None):
-      pass
+      'transfer funds, basically records the transaction one at a time'
+      dao = AMSDao()
+      current_time = time.localtime()
+      transation = Transaction(debited_account=debit_account, credited_account=credit_account,\
+      amount=amount, date=Time(month=current_time.tm_mon, day=current_time.tm_mday, \
+        year=current_time.tm_year))
+      dao.save_transaction(transation)
+      return True
 
     def view_journal(self, from_date=None, to_date=None):
       pass
@@ -64,9 +83,9 @@ class AMSService(object):
 
   def __new__(cls):
     'creates the AMSService object'
-    if not AMSService.instance:
-      AMSService.instance = AMSService.__AMSService()
-    return AMSService.instance
+    if not cls.instance:
+      cls.instance = cls.__AMSService()
+    return cls.instance
 
   def __init__(self):
     pass
