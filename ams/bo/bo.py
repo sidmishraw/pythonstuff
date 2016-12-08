@@ -39,6 +39,10 @@ class Account(object):
       self.__balance = balance
     self.__type = account_type
 
+  def get_account_ID(self):
+    'fetches the account ID'
+    return self.__id
+
   def get_name(self):
     'fetches the account name'
     return self.__name
@@ -80,6 +84,10 @@ class Transaction(object):
     self.__debited_account = debited_account
     self.__amount = amount
 
+
+  def get_transaction_ID(self):
+    'fetches the id of the transaction'
+    return self.__id
 
   def get_date(self):
     'fetches the date for the transaction'
