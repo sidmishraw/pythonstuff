@@ -88,7 +88,9 @@ class AMSDao(object):
   # used for making the AMSDao a singleton class
   instance = None
 
-  # I'm basically creating just one instance of the 
+  # I'm basically creating just one instance of the __AMSDao class
+  # which is the actual DAO class. The outer AMSDao is used for making
+  # inner __AMSDao class singleton
   def __new__(cls):
     'creates the object for AMSDao'
     if not AMSDao.instance:
