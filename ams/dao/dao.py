@@ -1,6 +1,12 @@
 # dao.py
 # DAO class for AMS
 
+# after PEP 8 lecture from Raymond I think using a class for dao doesn't seem
+# as a bad idea, since there can be lots of setup and teardown tasks that
+# need to be taken care of by the DAO
+# instead have a context manager pattern with __enter__() and __exit__() methods
+# defined for the class, so that it can be used with the with clause
+
 'Module for dao for AMS'
 
 __author__ = 'sidmishraw'
