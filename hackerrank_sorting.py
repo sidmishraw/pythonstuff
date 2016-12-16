@@ -86,11 +86,11 @@ def closest_numbers():
 def quick_partitioner(array, start_index, pivot_index):
   i = start_index
   for j in range(start_index, pivot_index, 1):
-    if array[j] <= array[pivot_index]:
+    if array[j] < array[pivot_index]:
       array[i], array[j] = array[j], array[i]
       i += 1
   array[pivot_index], array[i] = array[i], array[pivot_index]
-  print(array, i)
+  # print(array, i)
   return (array, i)
 
 def find_the_median():
@@ -98,7 +98,8 @@ def find_the_median():
   n = int(input())
   array = list(map(int, input().split(" ")))
   pivot_index = len(array) - 1
-  median_index = int(pivot_index / 2)
+  # // operator gives the floor value, int always
+  median_index = pivot_index // 2
   index = pivot_index
   start_index = 0
   while index != median_index:
@@ -108,8 +109,6 @@ def find_the_median():
     elif index < median_index:
       start_index = index + 1
   print(array[median_index])
-
-
 
 # Insertion sort advanced analysis
 # Sample Input
@@ -259,13 +258,187 @@ def merge_sort(array, start_index, mid, end_index):
       j += 1
 
 
+# FRAUDULENT_ACTIVITY_NOTIFICATIONS
+# hackerrank's fraudalent activity notifications problem
+# Sample Input 0
+# 9 5
+# 2 3 4 2 3 6 8 4 5
+# Sample Output 0
+# 2
+# instead of sorting small arrays everytime, lets try sorting the array once
+# but this will not maintain the order of the transactions
+def fraudulent_activity_notificationsv1():
+  'computes the number of notifications generated for the fraudalent activities v1.0'
+  n, d = tuple(map(int, input().split(" ")))
+  transactions = list(map(int, input().split(" ")))
+  nbr_notifications = 0
+  window_init = 0
+  window_end = window_init + d
+  for i in range(d, n, 1):
+    transactions_considered = sorted(transactions[window_init:window_end])
+    print('transactions considered = %s' % transactions_considered)
+    median = 0
+    if d % 2 == 0:
+      median = (transactions_considered[d // 2] \
+        + transactions_considered[(d // 2) + 1]) // 2
+    else:
+      median = transactions_considered[d // 2]
+    print('median = %s' % median)
+    if transactions[i] >= (2 * median):
+      nbr_notifications += 1
+    window_init += 1
+    window_end += 1
+  print(nbr_notifications)
+
+
+# FRAUDULENT_ACTIVITY_NOTIFICATIONS
+# hackerrank's fraudalent activity notifications problem
+# Sample Input 0
+# 9 5
+# 2 3 4 2 3 6 8 4 5
+# Sample Output 0
+# 2
+# instead of sorting small arrays everytime, lets try sorting the array once
+# but this will not maintain the order of the transactions
+# Constraints:
+# 1 <= n <= 2 * 10 ** 5
+# 1 <= d <= n
+# 0 <= expenditure <= 200
+# Since the expenditure is within a countable range, I can go with
+# fixed length array approach of counting sort
+def counting_sort_median_generator(array, max_range = 200):
+  'counting sort function, takes in max count range to be 200 by default \
+  but the array should have elements within [0, max_range]'
+  counting_array = [0] * max_range
+  # Note- cannot do assignments inside lambdas,
+  # hence going with this approach, since I need to do assignments
+  for element in array:
+    counting_array[element] += 1
+  median = 0
+  len_array = len(array)
+  if len_array % 2 != 0:
+    median_position = (len_array + 1) // 2
+    counter = 0
+    for element, count in enumerate(counting_array):
+      counter += count
+      if counter >= median_position:
+        median = element
+        break
+  else:
+    median_position_1 = len_array // 2
+    median_position_2 = median_position_1 + 1
+    counter = 0
+    median = 0
+    for element, count in enumerate(counting_array):
+      counter += count
+      if counter >= median_position_1:
+        median += element
+      if counter >= median_position_2:
+        median += element
+        break
+    median /= 2
+  return median
+
+# takes the array and generates the median for the list of unsorted ints
+def quick_sort_median_generator(array):
+  import math
+  'hackerrank find the median challenge problem using quicksort partitioner'
+  pivot_index = len(array) - 1
+  # // operator gives the floor value, int always
+  # 2 median indices, one takes the floor and the other takes the ceil
+  median_index_floor = math.floor(pivot_index / 2)
+  median_index_ceil = math.ceil(pivot_index / 2)
+  median = 0
+  index = pivot_index
+  start_index = 0
+  while index != median_index_ceil:
+    array, index = quick_partitioner(array, start_index, pivot_index)
+    if index > median_index_ceil:
+      pivot_index = index - 1
+    elif index < median_index_floor:
+      start_index = index + 1
+  if median_index_floor == median_index_ceil:
+    median = array[median_index_floor]
+  else:
+    median = (array[median_index_floor] + array[median_index_ceil]) / 2
+  return median
+
+
+def fraudulent_activity_notificationsv2():
+  'computes the number of notifications generated for the fraudalent activities v2.0'
+  import time
+  n, d = tuple(map(int, input().split(" ")))
+  transactions = list(map(int, input().split(" ")))
+  nbr_notifications = 0
+  window_init = 0
+  window_end = window_init + d
+  s_time = time.time()
+  for i in range(d, n, 1):
+    # transactions considered
+    i_time = time.time()
+    median = quick_sort_median_generator(transactions[window_init:window_end])
+    f_time = time.time()
+    print('median = %s and time taken = %s' % (median, f_time - i_time))
+    if transactions[i] >= (2 * median):
+      nbr_notifications += 1
+    window_init += 1
+    window_end += 1
+  e_time = time.time()
+  print(nbr_notifications, 'final time = %s' % (e_time - s_time))
+
+import math
+def median_count_sort(key):
+  'counting sort implementation'
+  global counting_array
+  counter = 0
+  for j in range(0, 200, 1):
+    counter = counter + counting_array[j]
+    if counter >= key:
+      return j
+
+
+# FRAUDULENT_ACTIVITY_NOTIFICATIONS
+# hackerrank's fraudalent activity notifications problem
+# Sample Input 0
+# 9 5
+# 2 3 4 2 3 6 8 4 5
+# Sample Output 0
+# 2
+counting_array = [0] * 200
+
+# for some reason, it fails in case of using the editorial logic in some cases
+# then again, the solution was in python2.
+def fraudulent_activity_notifications():
+  'v3.0'
+  n, d = tuple(map(int, input().split(" ")))
+  transactions = list(map(int, input().split(" ")))
+  nbr_notifications = 0
+  global counting_array
+  for i in range(0, n, 1):
+    spend = transactions[i]
+    if i >= d:
+      median = median_count_sort(d / 2 + d % 2)
+      if d % 2 == 0:
+        floor_median = median_count_sort(d / 2 + 1)
+        if spend >= median + floor_median:
+          nbr_notifications += 1
+      else:
+        if spend >= (2 * median):
+          nbr_notifications += 1
+    counting_array[spend] += 1
+    if i >= d:
+      prev = transactions[i - d]
+      counting_array[prev] = counting_array[prev] 1
+  print(nbr_notifications)
+
 def main():
   'main function to test out other functions'
 
   # full_counting_sort()
   # closest_numbers()
   # find_the_median()
-  advanced_insertion_sort_analysis()
+  # advanced_insertion_sort_analysis()
+  fraudulent_activity_notifications()
 
 
 # trying out class decorators without arguments
