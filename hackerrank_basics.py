@@ -76,11 +76,73 @@ def gridland_metro():
     print(grid)
     print(post_count)
 
+# lonely integer problem from hackerrank
+def lonely_integer():
+  n = int(input())
+  array = list(map(int, input().split(" ")))
+  cache = {}
+  for e in array:
+    if e in cache:
+      cache[e] += 1
+    else:
+      cache[e] = 1
+  for key, value in cache.items():
+    if value == 1:
+      print(key)
+      break
 
+# missing numbers problem from hackerrank
+def missing_numbers():
+  n = int(input())
+  A = list(map(int, input().split(' ')))
+  m = int(input())
+  B  = list(map(int, input().split(' ')))
+  cacheA = {}
+  cacheB = {}
+  for e in A:
+    if e not in cacheA:
+      cacheA[e] = 1
+    else:
+      cacheA[e] += 1
+  for e in B:
+    if e not in cacheB:
+      cacheB[e] = 1
+    else:
+      cacheB[e] += 1
+  for key, freq in cacheB.items():
+    if key not in cacheA or cacheA[key] < freq:
+      print(key)
+
+ 
+# pairs problem from hackerrank
+def pairs():
+  'counts the number of pairs with difference k'
+  n, k = tuple(map(int, input().strip(" ").split(' ')))
+  array = list(map(int, input().strip(" ").split(' ')))
+  parsed_cache = set()
+  count = 0
+  for e in array:
+    less = e - k
+    if e not in parsed_cache:
+      parsed_cache.add(e)
+    else:
+      count += 1
+    if less in parsed_cache:
+      count += 1
+    else:
+      parsed_cache.add(less)
+  print(count)
+
+
+# adding a __init__.py inside a package makes it a python package, python doesn't treat
+# the folder as a module, instead it behaves like a package.
 def main():
-  #draw_staircase()
-  #circular_array_rotation()
-  gridland_metro()
+  # draw_staircase()
+  # circular_array_rotation()
+  # gridland_metro()
+  # lonely_integer()
+  # missing_numbers()
+  pairs()
 
 if __name__ == '__main__':
   main()
