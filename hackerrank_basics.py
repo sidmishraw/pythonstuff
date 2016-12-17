@@ -43,6 +43,8 @@ def circular_array_rotation():
 
 # train track and lighting problem
 # Gridland metro
+# Note - it is better to go with dictionary when using
+# count sort technique, since there looping is not heavy. Non 0 counts are lesser.
 def gridland_metro():
   'solution for the gridland metro problem on hackerrank'
   n, m, k = tuple(map(int, input().split(" ")))
