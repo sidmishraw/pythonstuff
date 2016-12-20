@@ -134,6 +134,144 @@ def pairs():
   print(count)
 
 
+# climbing the leaderboard Codesprint challenge
+def ranking_calc2(cache, x, ranking):
+  if ranking == 0:
+    return 1
+  if ranking not in cache:
+    return ranking
+  if cache[ranking] > x:
+    return ranking + 1
+  elif cache[ranking] == x:
+    return ranking
+  else:
+    return ranking_calc(cache, x, ranking - 1)
+
+# climbing the leaderboard Codesprint challenge
+def ranking_calc(cache, x, srank, lrank):
+  if srank >= lrank:
+    if cache[srank] <= x:
+      return srank
+    elif cache[srank] > x:
+      return srank + 1
+  mid = (srank + lrank) // 2
+  print('srank = %s, lrank = %s and mid = %s' % (srank, lrank, mid))
+  if cache[mid] == x:
+    return mid
+  elif cache[mid] < x:
+    return ranking_calc(cache, x, srank, mid - 1)
+  elif cache[mid] > x:
+    return ranking_calc(cache, x, mid + 1, lrank)
+
+
+# not optimal solution
+def climbing_leaderboard():
+  'for solving the climbing leaderboard challenge of codesprint'
+  n = int(input())
+  scores = list(map(int, input().split(" ")))
+  m = int(input())
+  alices = list(map(int, input().split(" ")))
+  score_cache = {}
+  ranking = 1
+  for score in scores:
+    if ranking in score_cache:
+      if score_cache[ranking] > score:
+        ranking += 1
+        score_cache[ranking] = score
+    else:
+      score_cache[ranking] = score
+  for alice in alices:
+    ranking_calced = ranking_calc(score_cache, alice, 1, ranking)
+    print(ranking_calced)
+
+# not optimal solution
+def climbing_leaderboard2():
+  'for solving the climbing leaderboard challenge of codesprint'
+  n = int(input())
+  scores = list(map(int, input().split(" ")))
+  m = int(input())
+  alices = list(map(int, input().split(" ")))
+  ranking = 0
+  prev = float('inf')
+  for score in scores:
+    if score < prev:
+      prev = score
+      ranking += 1
+  for alice in alices:
+    rank_index = len(scores) - 1
+    rank = ranking
+    while rank_index > -1:
+      if rank_index == 0:
+        print('1')
+        break
+      elif alice < scores[rank_index]:
+        print(rank + 1)
+        break
+      elif alice == scores[rank_index]:
+        print(rank)
+        break
+      else:
+        rank_index -= 1
+        if scores[rank_index] > scores[rank_index + 1]:
+          rank -= 1
+
+
+# computes the prime numbers
+def is_prime(number):
+  'checks if number is prime'
+  import math
+  if number % 2 == 0 and number > 2: 
+    return False
+  for i in range(3, int(math.sqrt(number)) + 1, 2):
+    if number % i == 0:
+      return False
+  return True
+
+
+
+def find_prime_count(number, digits):
+  'computes the number of primes'
+  s = str(number)
+  wi_index = 0
+  wf_index = digits - 1
+  while wf_index < len(s):
+    dsum = sum(list(map(int, s[wi_index:wf_index])))
+    if is_prime(dsum):
+      continue
+    else:
+      return 0
+
+
+
+# prime digits sum
+def prime_digits_sum():
+  'prime digits sum problem from hackerrank'
+  q = int(input().strip())
+  for _ in range(0, q, 1):
+    n = int(input().strip())
+    count = 0
+    for number in range(10 ** (n - 1), 10 ** n, 1):
+      count3 = find_prime_count(number, 3)
+      if count3 == 0:
+        count = 0
+        break
+      else:
+        count += count3
+      count4 = find_prime_count(number, 4)
+      if count4 == 0:
+        count = 0
+        break
+      else:
+        count += count4
+      count5 = find_prime_count(number, 5)
+      if count5 == 0:
+        count = 0
+        break
+      else:
+        count += count5
+    print(count)
+
+
 # adding a __init__.py inside a package makes it a python package, python doesn't treat
 # the folder as a module, instead it behaves like a package.
 def main():
@@ -142,7 +280,9 @@ def main():
   # gridland_metro()
   # lonely_integer()
   # missing_numbers()
-  pairs()
+  # pairs()
+  # climbing_leaderboard()
+  prime_digits_sum()
 
 if __name__ == '__main__':
   main()
