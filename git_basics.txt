@@ -275,6 +275,9 @@ git commit -m "first commit"
 git remote add origin https://github.com/sidmishraw/pythonstuff.git
 git push -u origin master
 
+## Note - origin is the repository name, it can be anything you want
+# for example bulbasaur
+
 
 
 # push an existing repository from command line
@@ -465,7 +468,7 @@ git stash drop <stash name from listing>
 git stash clear
 
 
-# stash it carried over from branch to branch
+# stash is carried over from branch to branch
 # helpful when carrying over changes that were not meant to be made on master
 # branch to another branch
 
