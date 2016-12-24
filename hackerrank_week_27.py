@@ -27,15 +27,28 @@ def update_cache(cache, m, mincost):
 def tailor_shop():
   'solution for the tailor shop problem on code week 27'
   import math
-  n, p = tuple(map(int, input().strip().split(" ")))
-  a = list(map(int, input().strip().split(' ')))
-  cache = set()
-  for mincost in a:
-    m = math.ceil(mincost / p)
-    print('m = %s cache = %s' % (m, cache))
-    update_cache(cache, m, mincost)
-  min_nbr = sum(cache)
-  print(min_nbr)
+
+  size, cost = tuple(map(int, input().strip().split(" ")))
+  min_cost_array = list(map(int, input().strip().split(' ')))
+  min_count_array = list(map(lambda x: math.ceil(x / cost), min_cost_array))
+
+  print(min_count_array)
+
+  history = set()
+
+  for x in min_count_array:
+
+    history_size = len(history)
+
+    for _ in range(0, history_size + 1, 1):
+
+      if x not in history:
+        history.add(x)
+        break
+      else:
+        x += 1
+
+  print(sum(history))
 
 
 def main():
