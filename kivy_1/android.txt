@@ -1,0 +1,3 @@
+title=Kivy_Example_1
+author=sidmishraw
+orientation=landscape
