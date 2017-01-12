@@ -4,12 +4,15 @@
 # @Author: Sidharth Mishra
 # @Date:   2017-01-11 14:48:11
 # @Last Modified by:   Sidharth Mishra
-# @Last Modified time: 2017-01-11 23:19:17
+# @Last Modified time: 2017-01-11 23:22:51
 
 
 __author__ = 'sidmishraw'
 
 __PERSONAL_API_KEY__ = '7A94EF436CDBB9F1FB8624E0632CD54B'
+
+# The base URL for the AC Transit APIs
+__BASE_URL__ = 'https://api.actransit.org/transit'
 
 
 # for processing JSON
@@ -157,7 +160,7 @@ class ACTransitPrediction(object):
 # Retrieve all of AC Transit's currently active stops.
 def get_stops(user_api_key):
   'Gets all currently activ stops of the ACTransit system.'
-  url = 'https://api.actransit.org/transit/stops/?token=%s' % user_api_key
+  url = '%s/stops/?token=%s' % (__BASE_URL__, user_api_key)
   json_obj = None
   json_decoder = JSONDecoder()
   with urlopen(url) as req:
