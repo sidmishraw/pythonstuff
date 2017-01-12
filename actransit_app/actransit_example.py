@@ -4,10 +4,11 @@
 # @Author: Sidharth Mishra
 # @Date:   2017-01-11 14:48:11
 # @Last Modified by:   Sidharth Mishra
-# @Last Modified time: 2017-01-11 17:32:49
+# @Last Modified time: 2017-01-11 23:19:17
 
 
 __author__ = 'sidmishraw'
+
 __PERSONAL_API_KEY__ = '7A94EF436CDBB9F1FB8624E0632CD54B'
 
 
@@ -37,7 +38,7 @@ import webbrowser
 #     "Longitude": -122.2882275,
 #     "ScheduledTime": null
 #   }
-class ACTransitStopsObject(object):
+class ACTransitStop(object):
   'This is the implementation of the object model used by ACTransit for their \
   Stops JSON object.'
 
@@ -46,6 +47,7 @@ class ACTransitStopsObject(object):
     name, latitude, longitude and \
     scheduled_time as the input\
     arguments to make this object.'''
+    self.__json__ = json_obj
     self.__stopId = json_obj['StopId']
     self.__name = json_obj['Name']
     self.__latitude = json_obj['Latitude']
@@ -77,6 +79,10 @@ class ACTransitStopsObject(object):
     'The scheduled time for the bus as per the AC Transit system.'
     return self.__scheduled_time
 
+  def __repr__(self):
+    'repr() calls this method.'
+    return 'ACTransitStop({})'.format(repr(self.__json__))
+
 
 # Predictions
 # JSON example -
@@ -95,6 +101,7 @@ class ACTransitPrediction(object):
   def __init__(self, json_obj):
     'Takes the json_object representation(python dict) as the input and\
     initializes the prediction object.'
+    self.__json__ = json_obj
     self.__stopId = json_obj['StopId']
     self.__tripId = json_obj['5155418']
     self.__vehicleId = json_obj['VehicleId']
@@ -138,15 +145,19 @@ class ACTransitPrediction(object):
     'The predicted data and time as per AC Transit system.'
     return self.__predicted_date_time
 
+  def __repr__(self):
+    'called by the repr()'
+    return 'ACTransitPrediction({})'.format(repr(self.__json__))
+
 
 
 # API wrappers for AC Transit
 
 # GET stops
 # Retrieve all of AC Transit's currently active stops.
-def get_stops():
+def get_stops(user_api_key):
   'Gets all currently activ stops of the ACTransit system.'
-  url = 'https://api.actransit.org/transit/stops/?token=%s' % __PERSONAL_API_KEY__
+  url = 'https://api.actransit.org/transit/stops/?token=%s' % user_api_key
   json_obj = None
   json_decoder = JSONDecoder()
   with urlopen(url) as req:
@@ -154,13 +165,13 @@ def get_stops():
   json_obj = json_decoder.decode(json_obj)
   ac_transit_stops = []
   for obj in json_obj:
-    ac_transit_stops.append(ACTransitStopsObject(obj))
+    ac_transit_stops.append(ACTransitStop(obj))
   return ac_transit_stops
 
 # GET stops/{latitude}/{longitude}/{distance}/{routeName}
 # Retrieve all active stops within a certain radius (in feet) 
 # of the given point. The default search radius is 500 feet.
-def get_active_stops(latitude, longitude, search_radius = 500):
+def get_active_stops(user_api_key, latitude, longitude, search_radius = 500):
   'Retrieve all active stops within a certain radius (in feet) \
   of the given point. The default search radius is 500 feet.'
   pass
@@ -168,21 +179,26 @@ def get_active_stops(latitude, longitude, search_radius = 500):
 # GET stops/{latitude}/{longitude}?distance={distance}&routeName={routeName}
 # Retrieve all active stops within a certain radius (in feet) 
 # of the given point. The default search radius is 500 feet.
-def get_active_stops_type2(latitude, longitude, search_radius = 500):
+def get_active_stops_type2(user_api_key, latitude, longitude, search_radius = 500):
   'Retrieve all active stops within a certain radius (in feet) \
   of the given point. The default search radius is 500 feet.'
   pass
 
 # GET stops/{stopId}/predictions  
 # Retrieve vehicle predictions for a particular stop.
-def get_predictions(stopId):
+def get_predictions(user_api_key, stopId):
   'Retrieve vehicle predictions for a particular stop.'
   pass
 
 
 
 def main():
-  'main function'
+  'main function does nothing since this is going to be a library module.\
+  This cannot be run standalone as the main module. If run as main module, \
+  this script does nothing.'
+  # because this is going to be a library module
+  # the main function should do nothing if this module is executed as
+  # the main module.
   pass
 
 
