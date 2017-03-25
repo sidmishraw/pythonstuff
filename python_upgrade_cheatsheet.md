@@ -248,3 +248,5 @@ ln -s ../../../Cellar/python3/3.6.1/Frameworks/Python.framework/Versions/3.6 3.6
 Sidharths-MBP:python3 sidmishraw$ 
 ```
 
+### Stuff to check for after the upgrade of python:
+1. Check if pip has the packages you needed. [virtualenv is the most important one]
